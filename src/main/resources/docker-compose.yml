@@ -1,0 +1,73 @@
+version: '3.9'
+
+services:
+  app:
+    image: openjdk:21
+    container_name: my-java-app
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./myapp.jar:/app/myapp.jar
+    working_dir: /app
+    command: [ "java", "-jar", "myapp.jar" ]
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/susu_helper
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: susu_helper
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d susu_helper"]
+      interval: 20s
+      retries: 5
+      start_period: 10s
+      timeout: 2.5s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "2m"
+        max-file: "5"
+
+  db-backup:
+    image: postgres:latest
+    container_name: postgres_backup
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backups:/backups
+    environment:
+      PGPASSWORD: root
+    command: >
+      bash -c "while true; do
+        pg_dump -U root -h db susu_helper > /backups/db_backup_$(date +%F).sql;
+        sleep 86400;
+      done"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    depends_on:
+      db:
+        condition: service_healthy

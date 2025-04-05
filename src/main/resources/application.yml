@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: SusuHelper
+  datasource:
+    url: jdbc:postgresql://localhost:5432/susu_helper
+    username: root
+    password: root
+  liquibase:
+    enabled: false
+    change-log: classpath:db/changelog.xml
+
+logging:
+  level:
+    org:
+      springframework: INFO
+    liquibase: INFO
