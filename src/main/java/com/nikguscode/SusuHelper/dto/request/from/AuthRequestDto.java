@@ -1,4 +1,4 @@
-package com.nikguscode.SusuHelper.dto.request;
+package com.nikguscode.SusuHelper.dto.request.from;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

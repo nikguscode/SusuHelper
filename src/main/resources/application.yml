@@ -6,7 +6,7 @@ spring:
     username: root
     password: root
   liquibase:
-    enabled: false
+    enabled: true
     change-log: classpath:db/changelog.xml
 
 logging:

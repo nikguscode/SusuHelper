@@ -46,6 +46,7 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
+			<version>4.31.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -83,7 +84,6 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			<!-- Плагин Spring Boot без исключения Lombok -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
